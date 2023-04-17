@@ -12,6 +12,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,10 +33,15 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        var userId by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+        var loginEnabled by remember { mutableStateOf(false) }
+
         TextField(
-            value = "", // TODO 入力した文字列が表示されるようにする
+            value = userId,
             onValueChange = { value ->
-                // TODO 状態を更新する
+                userId = value
+                loginEnabled = userId.length >= 4 && password.length >= 8
             },
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = stringResource(R.string.user_id)) },
@@ -40,9 +49,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         )
 
         TextField(
-            value = "", // TODO 入力した文字列が表示されるようにする
+            value = password,
             onValueChange = { value ->
-                // TODO 状態を更新する
+                password = value
+                loginEnabled = userId.length >= 4 && password.length >= 8
             },
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = stringResource(R.string.password)) },
@@ -53,7 +63,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         Button(
             onClick = { },
             modifier = Modifier.fillMaxWidth(),
-            enabled = true // TODO ユーザーIDが4文字以上、かつパスワードが8文字以上入力されたら押せるようにする
+            enabled = loginEnabled
         ) {
             Text(text = stringResource(R.string.login))
         }
