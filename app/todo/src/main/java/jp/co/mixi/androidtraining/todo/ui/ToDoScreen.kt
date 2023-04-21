@@ -12,49 +12,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.co.mixi.androidtraining.todo.R
 import jp.co.mixi.androidtraining.todo.data.entity.Task
 
 @Composable
 fun ToDoScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ToDoViewModel = viewModel()
 ) {
-    // TODO UiStateクラスにする
-    var tasks by remember { mutableStateOf(emptyList<Task>()) }
-    var inputText by remember { mutableStateOf("") }
-    var addEnabled by remember { mutableStateOf(false) }
-
     Column(modifier = modifier) {
+        val uiState = viewModel.uiState
         TaskList(
-            tasks = tasks,
-            onDeleteButtonClick = { task ->
-                // TODO ViewModelにイベントを送る
-                tasks = tasks - task
-            },
+            tasks = uiState.tasks,
+            onDeleteButtonClick = viewModel::deleteTask,
             modifier = Modifier.weight(1f)
         )
 
         TaskTextField(
-            value = inputText,
-            addButtonEnabled = addEnabled,
-            onValueChange = { value ->
-                // TODO ViewModelにイベントを送る
-                inputText = value
-                addEnabled = value.isNotBlank()
-            },
-            onAddButtonClick = {
-                // TODO ViewModelにイベントを送る
-                tasks = listOf(Task(title = inputText)) + tasks
-                inputText = ""
-                addEnabled = false
-            },
+            value = uiState.inputText,
+            addButtonEnabled = uiState.addEnabled,
+            onValueChange = viewModel::setInputText,
+            onAddButtonClick = viewModel::addTask,
             modifier = Modifier.fillMaxWidth()
         )
     }
