@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <string name="add">追加</string>
+    <string name="delete">削除</string>
+</resources>
