@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SNS</string>
+    <string name="get_timeline_failed">タイムラインの取得に失敗しました</string>
+    <string name="retry">再試行</string>
 </resources>

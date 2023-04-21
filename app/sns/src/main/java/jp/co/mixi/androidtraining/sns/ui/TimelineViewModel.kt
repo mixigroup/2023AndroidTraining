@@ -14,16 +14,17 @@ class TimelineViewModel(
     private val repository: TimelineRepository = DefaultTimelineRepository()
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(TimelineUiState())
+    var uiState by mutableStateOf<TimelineUiState>(TimelineUiState.Success())
         private set
 
     fun getTimeline() {
         viewModelScope.launch {
-            try {
+            uiState = TimelineUiState.Loading
+            uiState = try {
                 val posts = repository.getTimeline()
-                uiState = uiState.copy(posts = posts)
+                TimelineUiState.Success(posts = posts)
             } catch (error: IOException) {
-                // TODO エラー画面を表示する
+                TimelineUiState.Error
             }
         }
     }
